@@ -51,14 +51,13 @@ class Record:
         
 
     def find_phone(self, phone):
-        for number in self.phones:
-            if number.value == phone:
-                print(f'I found necessary number {number.value}')
-                return number
-            else: 
-                pass
-        print('phone not found')
-        raise ValueError
+        try:
+            for number in self.phones:
+                if number.value == phone:
+                    print(f'I found necessary number {number.value}')
+                    return number
+        except ValueError:
+            print('phone not found') 
 
     def remove_phone(self, phone):
         for number in self.phones:
@@ -69,21 +68,20 @@ class Record:
 
 class AddressBook(UserDict):
     def add_record(self, record: Record):
-        self.data[record] = record
+        self.data[record.name.value] = record
 
     def find(self, name_to_find):
-        for record in self.data:
-            if record.name.value != name_to_find:
-                pass
-            elif record.name.value == name_to_find:
+        for record in self.data.values():
+            if record.name.value == name_to_find:
                 print(f'{record} found')
                 return record
         return None
 
     def delete(self, name):
         try: 
-            name_to_delete = self.find(name)
-            self.data.pop(name_to_delete)
-            print(self.data)
+            record_to_delete = self.find(name)
+            if record_to_delete:
+                self.data.pop(record_to_delete.name.value)
+                print(self.data)
         except ValueError:
             print('such phone to delete not found')
